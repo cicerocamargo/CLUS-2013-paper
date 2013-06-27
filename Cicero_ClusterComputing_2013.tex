@@ -132,7 +132,7 @@ Several List Scheduling Algorithms like the following are based on These two att
 
 There are applications where the DAG is built dynamically as the program evolves. In these cases we can not use an algorithm like HLFET/HLFNET which needs the entire graph structure, from input to output vertices, to calculate the priority attribute for a task. However, algorithms like RANDOM and SCFET/SCFNET can be used for situations when certain tasks can be inserted in the graph asynchronously or one of its predecessors decides to create it. We can also use the arrival time of tasks to assign priorities during execution time. Two major algorithms are built over this idea: LIFO (Last In, First Out) gives higher priority to the most recently created task; FIFO (First In, First Out) gives higher priority to oldest ready task.
 
-\subsection{A Greedy Scheduling Strategy}
+\subsection{A Greedy Scheduling Strategy} \ref{ssec:greedy_strategy}
 
 The purpose of a scheduling $S$ is to complete the execution of a given DAG $G$ in a finite time. Scheduling algorithms usualy include strategies to minimize an index of performance, such as the total execution time, as considered in this paper. We note $|S(G)|$ the length of the scheduling, that is, the time required to complete the execution of all tasks in $G$. The basic list scheduling algorithm runs as follows.
 
@@ -145,7 +145,7 @@ The purpose of a scheduling $S$ is to complete the execution of a given DAG $G$ 
 \item Set all input tasks in $G$ as \emph{READY} and the remaining as \emph{NOT\_READY}
 \item $L = V$
 \item Sort($L$)
-\item \textbf{FOR EACH} processor $m$ \textbf{DO}
+\item \textbf{EACH} processor $\in m$ \textbf{DO (IN PARALLEL)}
    \begin{enumerate}
 		\item $\tau$ = GetReadyTask($L$)
 		\item \textbf{IF} $\tau$ is \textbf{NOT} \emph{NULL}
@@ -328,13 +328,11 @@ The situation observed in graphs $C_7$ and $C_8$ is different from that in $C_3$
 
 \section{Approximating Static Scheduling} \label{sec:practical_results}
 
-The purpose of this section is to present a study on the performance of different heuristics for prioritizing tasks in dynamic multithreaded environments. This study aims to measure the distance in terms of schedule lenght between dynamic multithread scheduling and static DAG scheduling, both using list algorithms. In the first part of the study we simulated two distinct execution environments, one for programs described in a DAG, the other for programs described in a DCG. We executed several experiments considering five priority policies for each environment. In the second part of the study we implemented the strategy that provided better results in the simulated evironment that cosidered DCGs in the full-fledged multithreaded environment of Anahy. In both parts of the study, we believe that the random strategy for prioritizing tasks is to insert less overhead operations by scheduling no need to select the task / thread to be launched.
+The purpose of this section is to present a study on the performance of different heuristics for prioritizing tasks in dynamic multithreaded environments. This study aims to measure the distance, in terms of the schedule lenght, between dynamic multithread scheduling and static DAG scheduling, both using list algorithms. In the first part of the study we simulated two distinct execution environments, one for programs described in a DAG, the other for programs described in a DCG. We executed several experiments considering five priority policies for each environment. In the second part of the study we implemented the strategy that provided better results in the simulated evironment that cosidered DCGs in the full-fledged multithreaded environment of Anahy. In both parts of the study, we believe that the random strategy for prioritizing tasks is to insert less overhead operations by scheduling no need to select the task / thread to be launched.
 
 \subsection{Simulating Dynamic Scheduling Behavior}
 
-For this paper we will present two case studies to examine the behavior of list scheduling a program described in a graph in a simulated dynamic environment. In both case studies we consider a synthetic application, whose DAG tasks and dependecies are generated ramdomly in a nested fork/join fashion. These comparisons we will make can only be obtained by simulation because in a real dynamic execution, the DAG is not available \emph{a priori}. The scheduling lenghts are presented in Figures~\ref{fig:simulation_same_costs} and~\ref{fig:simulation_different_costs} in terms of time units. In Figure~\ref{fig:simulation_same_costs} we considered that all tasks cost one time unit to be executed. In Figure~\ref{fig:simulation_different_costs} each task has a pseudo-random cost inside the interval $[1;10]$. For each case we run 100~simulations and considered the average of the results (the standard deviation was always below 5\%).
-
-The lines in the charts from Figures~\ref{fig:simulation_same_costs} and~\ref{fig:simulation_different_costs} represent the best results obtained using heuristics LIFO, FIFO, RANDOM, SCFET and SCFNET for prioritizing threads using the execution modes:
+In this Section we will present two case studies to examine the behavior of scheduling a program described in a graph in a simulated dynamic environment using list scheduling algorithms. In both case studies we consider a synthetic application, whose DAG tasks and dependecies are generated ramdomly in a nested fork/join fashion. The cost of each task is measured in terms of time units, and so is the schedule lenght. The results we will show next can only be obtained through simulation, because in a real dynamic execution the DAG is not available \emph{a priori}. So we generate the DAG, obtain the corresponding DCG, and simulate the execution of each program representations over different execution evironments that use list algorithms to do the scheduling. When we simulate the DAG scheduling, the processors run a loop similar to the one presented in the algorithm from Section~\ref{ssec:greedy_strategy}. When we simulate the DCG scheduling, the processors work like described in Section~\ref{sec:schedalgo}, but they can operate in three different execution modes:
 
 \begin{itemize}
 \item Work-First (WF): when a processor executes a \emph{create} operation, it starts instantaneously the execution of the newly created thread and the current thread is made available for other processors to resume it, becoming suspended if there is no idle processor. If a processor executes a \emph{join} over a non-finished thread, the current thread remains blocked until the joined thread is finished, when the previously blocked thread can be migrated to any processor to be resumed.
@@ -342,29 +340,17 @@ The lines in the charts from Figures~\ref{fig:simulation_same_costs} and~\ref{fi
 \item Help-First without Migration: the processor behaves the same way as in HF during thread creation. However, if a thead gets blocked on a \emph{join} operation only the current processor can resume its execution.
 \end{itemize}
 
-For comparison purposes, we present the best static schedule obtained using the heuristics HLFET, HLFNET, RANDOM, SCFET and SCFNET, presented in Section~\ref{sub:priority_attributes}.
+For each DAG generated, we scheduled them over the task processors using the algorithms HLFET, HLFNET, RANDOM, SCFET and SCFNET, presented in Section~\ref{sub:priority_attributes}. For each DCG generated, we scheduled them over the thread processors using the algorithms LIFO, FIFO, and RANDOM, and also SCFET and SCFNET, case in wich we bring the priority attributes from task to thread level.
 
-As we can see in the performance charts, the schedule lengths obtained in the dynamic simulations are very close to the static schedules, recalling that in these charts we show only the best schedules considering each execution mode. The greater distance among the dynamic multithreaded simulation results and the static schedules correspond to an execution up to 12\% slower than the best static scheduled one, and no multithreaded simulations provided schedule lengths less than or equal to static schedule lengths considering more than 2~processors.
+In the first case study we considered that all tasks cost one time unit to be executed. In the second case study each task has a pseudo-random cost inside the interval $[1;10]$. Since for the second case we can have completely different costs for the same graph structure, we run 100 simulations and calculated the average of the results (the standard deviation was always below 5\%).
 
-\begin{figure}[]
-	\centering	
-	\includegraphics[width=0.44\textwidth,angle=0]{figs/simulation_same_costs.eps}
-	\caption{Simulations considering an irregular graph structure and tasks with processing costs of 1 (one) time unit.}
-	\label{fig:simulation_same_costs}
-\end{figure}
+The schedule lengths obtained in the dynamic simulations were very close to the static schedules, for both case studies, considering all multithread execution modes. The greater distance among the dynamic multithreaded simulation results and the static schedules correspond to an execution up to 12\% slower than the best static schedule. Also, no multithreaded simulations provided schedule lengths less than or equal to static schedule lengths considering more than 2~processors.
 
-\begin{figure}[]
-	\centering
-	\includegraphics[width=0.44\textwidth,angle=0]{figs/simulation_different_costs.eps}	
-	\caption{Simulations considering an irregular graph structure and tasks with pseudo-random processing costs.}
-	\label{fig:simulation_different_costs}
-\end{figure}
-
-Another result we could extract from the simulations is that the heuristic SCFET provided 75\% of the best dynamic schedules, considering all execution modes: Work-First, and Help-First with and without migration.
+Considering the DAG schedules in the two case studies, all best schedules were obtained using HLFET algorithm, which prioritizes tasks that compose the Critical Path of the DAG. Considering the DCG schedules, the heuristic SCFET provided 75\% of the best dynamic schedules, considering all execution modes: Work-First, and Help-First with and without migration.
 
 \subsection{Scheduling Threads in a Dynamic Environment}
 
-In this section we present the performance  achieved by executing the Smith-Waterman algorithm~\cite{smith-waterman} with Anahy and other three multithread parallel environments: Cilk, TBB and OpenMP. The Smith-Waterman is a dynamic algorithm conceived to align sequences of characters. In Figure~\ref{fig:SW} we present the execution times (in the Y-axis) we have obtained to align 1,000 strings of 1,000 characters each one. The alignment was achieved considering blocks of $10 \times 10$ elements in the algorithm's work matrix. In this graph, the X-axis represents the maximum number of threads allowed to run in parallel. Each point in this graph corresponds to the average of 100 executions (standard deviation smaller than 5\%). Each curve in the graph corresponds to the execution times obtained by Anahy (considering two different heuristics to set the priority to threads), Cilk, TBB and OpenMP. The first three environments are multithreaded programming tools that include list scheduling strategies similar to those presented in this paper in their runtime. The execution times of the OpenMP implementation are shown to have a reference to the performance. For this application, the pure sequential program executes in 5.90~s. All assessments were obtained in a quad-core multiprocessor (hyper-threading enabled) with 8~GB of RAM under a GNU-Linux operating system.
+In this section we present the performance achieved by executing the Smith-Waterman algorithm~\cite{smith-waterman} with Anahy and other three multithread parallel environments: Cilk, TBB and OpenMP. The Smith-Waterman is a dynamic algorithm conceived to align sequences of characters. In Figure~\ref{fig:SW} we present the execution times (in the Y-axis) we have obtained to align 1,000 strings of 1,000 characters each one. The alignment was achieved considering blocks of $10 \times 10$ elements in the algorithm's work matrix. In this graph, the X-axis represents the maximum number of threads allowed to run in parallel. Each point in this graph corresponds to the average of 100 executions (standard deviation smaller than 5\%). Each curve in the graph corresponds to the execution times obtained by Anahy (considering two different heuristics to set the priority to threads), Cilk, TBB and OpenMP. The first three environments are multithreaded programming tools that include list scheduling strategies similar to those presented in this paper in their runtime. The execution times of the OpenMP implementation are shown to have a reference to the performance. For this application, the pure sequential program executes in 5.90~s. All assessments were obtained in a quad-core multiprocessor (hyper-threading enabled) with 8~GB of RAM under a GNU-Linux operating system.
 
 \begin{figure}[]
 	\centering	
