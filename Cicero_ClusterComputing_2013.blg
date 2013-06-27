@@ -1,0 +1,46 @@
+This is BibTeX, Version 0.99d (TeX Live 2012)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: Cicero_ClusterComputing_2013.aux
+The style file: spmpsci.bst
+Database file #1: bibs.bib
+You've used 21 entries,
+            2946 wiz_defined-function locations,
+            747 strings with 8257 characters,
+and the built_in function-call counts, 14092 in all, are:
+= -- 1536
+> -- 337
+< -- 4
++ -- 193
+- -- 118
+* -- 635
+:= -- 1494
+add.period$ -- 29
+call.type$ -- 21
+change.case$ -- 133
+chr.to.int$ -- 0
+cite$ -- 21
+duplicate$ -- 1536
+empty$ -- 994
+format.name$ -- 135
+if$ -- 2979
+int.to.chr$ -- 0
+int.to.str$ -- 21
+missing$ -- 213
+newline$ -- 96
+num.names$ -- 42
+pop$ -- 577
+preamble$ -- 1
+purify$ -- 101
+quote$ -- 0
+skip$ -- 753
+stack$ -- 0
+substring$ -- 562
+swap$ -- 1164
+text.length$ -- 4
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 78
+warning$ -- 0
+while$ -- 70
+width$ -- 23
+write$ -- 222

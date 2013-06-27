@@ -1,0 +1,115 @@
+\begin{thebibliography}{10}
+\providecommand{\url}[1]{{#1}}
+\providecommand{\urlprefix}{URL }
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{DOI~\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{DOI~\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+
+\bibitem{Albers99}
+Albers, S.: Better bounds for on-line scheduling.
+\newblock SIAM Journal on Computing p. 459–473 (1999)
+
+\bibitem{prasanna2005}
+Bakshi, A., Prasanna, V., Reich, J., Larner, D.: The abstract task graph: A
+  methodology for architecture-independent programming of networked sensor
+  systema.
+\newblock In: Workshop on End-to-Ed, Sense-and-Respond Systems, Applications,
+  and Services (2005)
+
+\bibitem{bartal95}
+Bartal, Y., Fiat, A., Karloff, H., , Vohra, R.: New algorithms for an ancient
+  scheduling problem.
+\newblock Journal Computer Systems Science \textbf{51}, 359--366 (1995)
+
+\bibitem{blumofe1994scheduling}
+Blumofe, R., Leiserson, C.: Scheduling multithreaded computations by work
+  stealing.
+\newblock In: Foundations of Computer Science, 1994 Proceedings., 35th Annual
+  Symposium on, pp. 356--368. IEEE (1994)
+
+\bibitem{Cilk95}
+Blumofe, R.D., et~al.: {Cilk}: an efficient multithreaded runtime system.
+\newblock ACM SIGPLAN Not. \textbf{30}(8) (1995)
+
+\bibitem{CiceroHPCLatam2012}
+Camargo, C.A.S., Cavalheiro, G.G.H., Pilla, M.L., da~Costa, S.A., Foss, L.:
+  Applying list scheduling algorithms in a multithreaded execution environment.
+\newblock In: Proceedings of the V Latin American Symposium on High Performance
+  Computing (2012)
+
+\bibitem{casavant88}
+Casavant, T.L., Kuhl, J.G.: A taxonomy of scheduling in general-purpose
+  distributed computing systems.
+\newblock IEEE Trans. Software Eng. \textbf{14}(2), 141--154 (1988)
+
+\bibitem{VecParLNCS}
+Cavalheiro, G.G.H., Gaspary, L.P., Cardozo, M.A., Cordeiro, O.C.: Anahy: A
+  programming environment for cluster computing.
+\newblock In: VII High Performance Computing for Computational Science.
+  Springer-Verlag, Berlin (2007).
+\newblock (LNCS 4395)
+
+\bibitem{Vicosa07}
+Cavalheiro, G.G.H., ViÇosa, E.: Athreads: a dataflow programming interface for
+  multiprocessors.
+\newblock In: LTPD 2007. Gramado-RS (2007)
+
+\bibitem{ChandraOpenMP}
+Chandra, R., Dagum, L., Kohr, D., Maydan, D., McDonald, J., Menon, R.: Parallel
+  Programming in {OpenMP}.
+\newblock Morgan Kaufmann, San Francisco (2001)
+
+\bibitem{coffman1973operating}
+Coffman~Jr, E., Denning, P.: Operating systems theory.
+\newblock Prentice Hall Professional Technical Reference (1973)
+
+\bibitem{cordeiro2005}
+Cordeiro, O., Peranconi, D., {Villa~Real}, L., {Dall'Agnol}, E., Cavalheiro,
+  G.: Exploiting multithreaded programming on cluster architectures.
+\newblock In: HPCS. Guelph (2005)
+
+\bibitem{ListScheduling1990}
+El-Rewini, H., Lewis, T.G.: Scheduling parallel program tasks onto arbitrary
+  target machines.
+\newblock J. Parallel Distrib. Comput. \textbf{9}(2), 138--153 (1990).
+\newblock \doi{http://dx.doi.org/10.1016/0743-7315(90)90042-N}
+
+\bibitem{Fleischer2000}
+Fleischer, R., Wahl, M.: On-line scheduling revisited.
+\newblock Journal of Scheduling p. 343–353 (2000)
+
+\bibitem{Graham76}
+Graham, R.: Bounds on the performance of scheduling algorithms.
+\newblock Computer and Job-Shop Scheduling Theory pp. 165--227 (1976)
+
+\bibitem{Graham66}
+Graham, R.L.: Bounds for certain multiprocessor anomalies.
+\newblock The Bell Syst. Tech. J. \textbf{CLV}(9) (1966)
+
+\bibitem{ListScheduling1989}
+Hwang, J.J., Chow, Y.C., Anger, F.D., Lee, C.Y.: Scheduling precedence graphs
+  in systems with interprocessor communication times.
+\newblock SIAM J. Comput. \textbf{18}(2), 244--257 (1989).
+\newblock \doi{http://dx.doi.org/10.1137/0218016}
+
+\bibitem{dataflowAdvances2004}
+Johnston, W.M., Hanna, J.R.P., Millar, R.J.: Advances in dataflow programming
+  languages.
+\newblock ACM Comput. Surv. \textbf{36}(1), 1--34 (2004).
+\newblock \doi{http://doi.acm.org/10.1145/1013208.1013209}
+
+\bibitem{karger96}
+Karger, D.R., Phillips, S.J., Torng, E.: A better algorithm for an ancient
+  scheduling problem.
+\newblock Journal of Algorithms \textbf{20}, 400--430 (1996)
+
+\bibitem{TBB2007}
+Reinders, J.: Intel threading building blocks, first edn.
+\newblock O'Reilly \& Associates, Inc., Sebastopol, CA, USA (2007)
+
+\bibitem{smith-waterman}
+Smith, T.F., Waterman, M.S.: Identification of common molecular subsequences.
+\newblock Journal of Molecular Biology \textbf{215}, 403--410 (1990)
+
+\end{thebibliography}
