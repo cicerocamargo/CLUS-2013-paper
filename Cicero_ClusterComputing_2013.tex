@@ -33,6 +33,15 @@
     red,densely dashed,every mark/.append style={solid,fill=red!80!black},mark=diamond*\\%
 }
 
+\pgfplotscreateplotcyclelist{color2}{%
+    blue,every mark/.append style={fill=blue!80!black},mark=*\\%
+    red,every mark/.append style={fill=red!80!black},mark=square*\\%
+    black,mark=star\\%
+    lime!80!black,every mark/.append style={fill=lime},mark=diamond*\\%
+    yellow!60!black,densely dashed,
+        every mark/.append style={solid,fill=yellow!80!black},mark=square*\\%
+}
+
 \begin{document}
 
 %Applying List Scheduling Algorithms In A Multithreaded Execution Environment
@@ -300,8 +309,8 @@ The performance of our case study is presented in terms of scheduling length, i.
 \caption{Scheduling of $C_i$.}\label{tab:resultados}
 \begin{tabular}{c|c||c||c|c||c}
 DCG/DAG & \# $m$ & $|S(C_i)|$ & $|S(G_i)|$ & $|S'(G_i)|$ & $|S(C_i')|$\\ \hline\hline
-$C_1$/$G_1$ & 3 & 12 & 12 & 14 & --\\ \hline
-$C_2$/$G_2$ & 2 & 19 & 19 & -- & --\\ \hline
+$C_1$/$G_1$ &  3  & 12 & 12 & 14 & --\\ \hline
+$C_2$/$G_2$ &  2  & 19 & 19 & -- & --\\ \hline
 $C_3$/$G_3$ & $m$ & $2m-1+2\varepsilon$ & $m+2\varepsilon$ & -- & $m+2\varepsilon$ \\ \hline
 $C_4$/$G_4$ & $m$ & $m+\varepsilon$ & $m+\varepsilon$ & -- & --\\ \hline
 $C_5$/$G_5$ & $m$ & $m'+2\varepsilon$ & $m'+2\varepsilon$  & -- & --\\ \hline
@@ -361,16 +370,89 @@ To analyze the performance of the chosen runtime environments we need first to c
 	\label{fig:SW}
 \end{figure}
 
-The Smith-Waterman is a dynamic algorithm conceived to align sequences of characters. In Figure~\ref{fig:SW} we present the results obtained matching one string of 1,000 characters against 1,000 strings of 1,000 characters each one. The alignment was achieved calculating blocks of $10 \times 10$ elements from the algorithm's work matrix in separate threads. In this graphic, we can observe that the better executions times were obtained when the maximum number of parallel threads was limited to four, except to TBB that in this experiment could exploit the hyper-threading. In this graph we highlight the difference of performance between the two curves representing two different heuristics to prioritize threads in Anahy: the implementation employing the SCFNET heuristic is clearly better than when the RANDOM one is employed. This fact indicates that the use of an elaborated scheduling strategy, taking into account the application requirements, could affect positively the final performance regardless the overhead introduced by the scheduling operations.
-
-% PAREI AQUI
+The Smith-Waterman is a dynamic algorithm conceived to align sequences of characters. In Figure~\ref{fig:SW} we present the results obtained matching one string of 1,000 characters against 1,000 strings of 1,000 characters each one. The alignment was achieved calculating blocks of $10 \times 10$ elements from the algorithm's work matrix in separate threads. In this graphic, we can observe that the better executions times were obtained when the maximum number of parallel threads was limited to four, except to TBB that in this experiment could exploit the hyper-threading. In this graph we highlight the difference of performance between the two curves representing two different heuristics to prioritize threads in Anahy: the implementation employing the SCFNET heuristic is clearly better than when the RANDOM one is employed. This fact indicates that the use of an elaborated scheduling strategy, taking into account the application requirements, could affect positively the final performance, regardless the overhead introduced by the scheduling operations.
 
 % QUICKSORT
 
+The second application tested was the Quicksort sorting algorithm. In our tests we took an array of 1,000,000 integer values, containing all the number in the interval $[0, 999,999]$, randomly shuffled. The method we used to parallelize the program was running each recursive call to Quicksort in a new thread. As the recursion of the algorithm can go very deep, thus generating threads with too little work to do, we used a threshold equal to 1,000, i.e., whenever the sorting method receives an array whose size is less than or equal to 1,000, it calls Selection sort, an iterative and stable sorting algorithm, without spawning any child threads. As we can see in Figure~\ref{fig:QS}, all tools achieved almost the same average execution time for all levels of parallelism in the X-axis. Also we could notice that for this instance of the problem running over Anahy, using RANDOM or SCFNET scheduling algorithm doesn't affect badly in the final performance, so the order of execution of threads doesn't affect the size of the scheduling in this case.
+
+\begin{figure}
+
+\begin{tikzpicture}
+    \begin{axis}
+    [
+        x tick label style={
+            /pgf/number format/1000 sep=},
+        ylabel={Time in seconds},
+        xlabel={Maximum number of parallel threads},
+        enlargelimits=0.15,
+        cycle list name=color2,
+        legend style={at={(0.5,-0.25)}, anchor=north, font=\small, legend cell align=center},
+        scale=0.9,
+        ymin=0,
+        xmin=1
+    ]
+
+\addplot
+    coordinates { (1,0.6433586) (2,0.3243749) (4,0.1709939) (6,0.1511108) (8,0.1353574) (10,0.1373824) };
+\addplot
+    coordinates { (1,0.6379632) (2,0.3243135) (4,0.1695245) (6,0.1499195) (8,0.1351627) (10,0.136144) };
+\addplot
+    coordinates { (1,0.6379366) (2,0.3216966) (4,0.1699995) (6,0.1507495) (8,0.1363323) (10,0.1384655) };
+\addplot
+    coordinates { (1,0.6578617) (2,0.3319039) (4,0.1750612) (6,0.1547782) (8,0.1393562) (10,0.1412169) };
+\addplot
+    coordinates { (1,0.6568872) (2,0.3374134) (4,0.1843884) (6,0.1646282) (8,0.1443955) (10,0.20499) };
+\legend{Anahy3 (RANDOM),Anahy3 (SCFNET),Cilk Plus,TBB,OpenMP}
+
+    \end{axis}
+\end{tikzpicture}
+\caption{Executions of Quicksort for an array of size 1,000,000 and threshold equal to 1,000.}
+\label{fig:QS}
+\end{figure}
+
 % MULTIPLICAÇÃO DE MATRIZES
 
+The last application tested was a basic square matrix multiplication, like $A = B \times C$. The method we used to parallelize was creating a function to compute each line of $A$ in a separate thread. Inside this function, we create different threads to compute each column of that row concurrently. Using this method we have a DCG with two levels of ancestor threads, what scales well for the parallelism we are exploring here. In Figure~\ref{fig:MM} we show the results considering that all three matrixes have $500 \times 500$ cells. OpenMP achieves the smallest average times, while shows the worst scalability. When using SCFNET algorithm, Anahy shows results that are very close to the ones provided by Cilk Plus. However, using the RANDOM scheduling algorithm the execution times of Anahy and his scalability are negatively affected, so in this problem it's important to employ a scheduling algorithm that's aware of the graph structure. Though TBB doesn't show the best execution times, its scalability is the greatest among the tested tools, for this case.
 
-In this section we have presented only a small part of the set of experiments achieved in the context of our research. Those results allow us to conclude that multithread environments can apply scheduling strategies based on list algorithm to improve the performance execution. We have shown also that different heuristics to prioritize threads can modify the final performance.
+\begin{figure}
+
+% WRONG PLOT!!
+
+\begin{tikzpicture}
+    \begin{axis}
+    [
+        x tick label style={
+            /pgf/number format/1000 sep=},
+        ylabel={Time in seconds},
+        xlabel={Maximum number of parallel threads},
+        enlargelimits=0.15,
+        cycle list name=color2,
+        legend style={at={(0.5,-0.25)}, anchor=north, font=\small, legend cell align=center},
+        scale=0.9,
+        ymin=0,
+        xmin=1
+    ]
+
+\addplot
+    coordinates { (1,0.2998509) (2,0.1510404) (4,0.0788937) (6,0.0708814) (8,0.0624345) (10,0.0635974) };
+\addplot
+    coordinates { (1,0.3020884) (2,0.1508999) (4,0.0786585) (6,0.0689798) (8,0.0631871) (10,0.0633123) };
+\addplot
+    coordinates { (1,0.1163602) (2,0.0584618) (4,0.0307714) (6,0.0321002) (8,0.0329874) (10,0.0354671) };
+\addplot
+    coordinates { (1,0.3000244) (2,0.1508803) (4,0.0790323) (6,0.0736677) (8,0.0700784) (10,0.0715612) };
+\addplot
+    coordinates { (1,0.125397) (2,0.0642284) (4,0.0344015) (6,0.0412318) (8,0.0314295) (10,0.036624) };
+\legend{Anahy3 (RANDOM),Anahy3 (SCFNET),Cilk Plus,TBB,OpenMP}
+
+    \end{axis}
+\end{tikzpicture}
+\caption{Resuls from the multiplication of matrixes of size $500 \times 500$, being each cell of the resulting matrix computed concurrently.}
+\label{fig:MM}
+\end{figure}
+
+In this section we have presented only a small part of the set of experiments achieved in the context of our research. Those results allow us to conclude that multithread environments can apply scheduling strategies based on pure list algorithms to improve the performance of the execution, achieving competitive levels compared to the main tools in the industry. We have shown also that different heuristics to prioritize threads can modify the final performance.
 
 \section{Concluding Remarks}\label{sec:conclusion}
 
